@@ -22,25 +22,31 @@ Take snapshots as a safety measure, in case if we want to revert back to the pre
 
 To configure GUI GNOME on CentOS 7, please follow the below steps
 
-# yum group list
+yum group list
 
 Lists all the available groups
 
-# yum groupinfo "Server with GUI"
+yum groupinfo "Server with GUI"
+
 AND
-# yum groupinfo "GNOME Desktop"
+
+yum groupinfo "GNOME Desktop"
 
 To install GNOME Desktop, please run the below command.
-# yum groupinstall 'GNOME Desktop'
+
+yum groupinstall 'GNOME Desktop'
 
 Change system target or runlevel from runlevel 3 to runlevel 5. This will ensure that we directly boot to GNOME GUI: 
 
-# systemctl enable graphical.target --force
+systemctl enable graphical.target --force
+
 rm '/etc/systemd/system/default.target'
+
 ln -s '/usr/lib/systemd/system/graphical.target' '/etc/systemd/system/default.target'
 
 All ready to reboot our CentoOS system: 
-# reboot
+
+reboot
 
 Your CentOS should now boot to GNOME GUI as default. 
 
@@ -150,26 +156,18 @@ Configure SSL on Apache2
 
     Modify the file /etc/httpd/conf.d/ssl.conf as follows:
 
-    ...
     SSLStaplingCache shmcb:/var/run/ocsp(128000)
     <VirtualHost _default_:443>
     DocumentRoot /var/www/html
     ServerName sp.example.org:443
     ServerAdmin admin@example.org
-    ...
     SSLEngine On
-    ...
     SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
-    ...
     SSLCipherSuite "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH"
     SSLHonorCipherOrder on
-    ...
     SSLCertificateFile /etc/pki/tls/certs/ssl-sp.crt
-    ...
     SSLCertificateKeyFile /etc/pki/tls/private/ssl-sp.key
-    ...
     SSLCACertificateFile /etc/pki/tls/certs/ca-bundle.crt
-    ...
     # Disable SSL Compression
     SSLCompression Off
          
@@ -189,7 +187,6 @@ Configure SSL on Apache2
 
         vim /etc/httpd/conf/httpd.conf
 
-        ...
         # Listen 12.34.56.78:80
         Listen 127.0.0.1:80
 
@@ -235,23 +232,22 @@ Configure Shibboleth SP
 
         vim /etc/shibboleth/shibboleth2.xml
 
-        ...
         <ApplicationDefaults entityID="https://sp.example.org/shibboleth"
              REMOTE_USER="eppn subject-id pairwise-id persistent-id"
              cipherSuites="DEFAULT:!EXP:!LOW:!aNULL:!eNULL:!DES:!IDEA:!SEED:!RC4:!3DES:!kRSA:!SSLv2:!SSLv3:!TLSv1:!TLSv1.1">
-        ...
+       
         <Sessions lifetime="28800" timeout="3600" relayState="ss:mem"
                   checkAddress="false" handlerSSL="true" cookieProps="https">
-        ...
+        
         <!-- To install and Configure the Shibboleth Embedded Discovery Service follow: http://tiny.cc/howto-idem-shib-eds -->
         <SSO discoveryProtocol="SAMLDS" discoveryURL="https://wayf.idem-test.garr.it/WAYF">
            SAML2
         </SSO>
-        ...
+        
         <Errors supportContact="support@example.org"
                helpLocation="/about.html"
                styleSheet="/shibboleth-sp/main.css"/>
-        ...
+        
         <MetadataProvider type="XML" url="http://md.idem.garr.it/metadata/idem-test-metadata-sha256.xml"
                           legacyOrgName="true" backingFilePath="idem-test-metadata-sha256.xml" maxRefreshDelay="7200">
               <MetadataFilter type="Signature" certificate="federation-cert.pem"/>
@@ -287,7 +283,6 @@ Configure an example federated resource "secure"
 
         vim /etc/httpd/conf.d/shib.conf
 
-        ...
         <Location /secure>
           AuthType shibboleth
           ShibRequestSetting requireSession 1
@@ -449,9 +444,9 @@ Enable Attribute Checker Support on Shibboleth SP
 
 SE Linux
 
-If you'll met problem, probably they are related to SE Linux.
+If you'll face any issue/problem, probably they are related to SE Linux.
 
-If you want to disable it until the next server reboot, doing this:
+If you want to disable it until the next server reboot, by doing this:
 
     sudo setenforce 0
 
